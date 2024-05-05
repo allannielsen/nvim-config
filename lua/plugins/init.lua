@@ -137,7 +137,9 @@ return {
     { -- Tree Sitter and friends --------------------------------------------
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        dependencies = { },
+        dependencies = {
+            "andymass/vim-matchup"
+        },
         config = function(_, opts)
             require 'nvim-treesitter'.setup()
             require 'nvim-treesitter.configs'.setup {
@@ -155,6 +157,11 @@ return {
                         scope_incremental = false,
                         node_decremental = "<bs>",
                     },
+                },
+                matchup = {
+                    enable = true,  -- mandatory, false will disable the whole extension
+                    disable = { },  -- optional, list of language that will be disabled
+                    -- [options]
                 },
             }
         end,
