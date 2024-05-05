@@ -16,7 +16,6 @@ return {
 
     { -- Run async tasks
         'stevearc/overseer.nvim',
-
         config = function(_, opts)
             require("overseer").setup()
         end,
@@ -28,6 +27,8 @@ return {
         'norcalli/nvim-colorizer.lua',
         cmd = {"ColorizerAttachToBuffer", "ColorizerDetachFromBuffer", "ColorizerReloadAllBuffers", "ColorizerToggle"},
     },
+
+    'Pocco81/HighStr.nvim', -- Allow to manually highlight something
 
     'windwp/nvim-projectconfig',  -- Per project settings
 

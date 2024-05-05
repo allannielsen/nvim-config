@@ -1,4 +1,5 @@
 {
+  "HighStr.nvim": { "branch": "main", "commit": "1cb5e030bb16df52c8428b53dc235466a4eb1d01" },
   "aurora": { "branch": "master", "commit": "f712bacedb99b862f558540a1d67ec5b7dcee30b" },
   "bamboo.nvim": { "branch": "master", "commit": "f624433d750dbf69ce93ee057fbc1c595aa13e31" },
   "catppuccin": { "branch": "main", "commit": "6af91673ceccbd6e073b66c439e7fce239f72d24" },
