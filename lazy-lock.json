@@ -2,6 +2,7 @@
   "aurora": { "branch": "master", "commit": "f712bacedb99b862f558540a1d67ec5b7dcee30b" },
   "bamboo.nvim": { "branch": "master", "commit": "f624433d750dbf69ce93ee057fbc1c595aa13e31" },
   "catppuccin": { "branch": "main", "commit": "6af91673ceccbd6e073b66c439e7fce239f72d24" },
+  "clangd_extensions.nvim": { "branch": "main", "commit": "430a8f56605cb1d0ed9876301d6e9bf675195e16" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "5af77f54de1b16c34b23cba810150689a3a90312" },
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
