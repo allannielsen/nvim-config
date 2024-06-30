@@ -11,7 +11,7 @@ vim.opt.textwidth = 80    -- Set the line width to 80 characters
 
 -- Visual Cues -----------------------------------------
 vim.opt.hidden = true     -- Allow edit buffers to be hidden
-vim.opt.guioptions = ""   -- Remove menus
+-- vim.opt.guioptions = ""   -- Remove menus
 vim.opt.mouse = ""        -- Disable mouse support
 -- set noerrorbells       -- Turn off beep on error
 -- set hlsearch           -- highlight search - show the current search pattern
