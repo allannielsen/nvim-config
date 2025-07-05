@@ -152,13 +152,17 @@ return {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         dependencies = {
-            "andymass/vim-matchup"
+            "andymass/vim-matchup",
+            -- "RRethy/nvim-treesitter-endwise"
         },
         config = function(_, opts)
             require 'nvim-treesitter'.setup()
             require 'nvim-treesitter.configs'.setup {
                 highlight = { enable = false },
-                indent = { enable = true },
+                indent = {
+                    enable = true,
+                    disable = { "ruby" },
+                },
                 ensure_installed = { "awk", "bash", "c", "cpp", "cmake", "css", "devicetree", "diff",
                     "dockerfile", "html", "javascript", "jsdoc", "json", "jsonc", "lua", "luadoc", "luap",
                     "markdown", "markdown_inline", "python", "query", "regex", "ruby", "rust", "toml",
@@ -177,8 +181,19 @@ return {
                     disable = { },  -- optional, list of language that will be disabled
                     -- [options]
                 },
+                -- endwise = {
+                --     enable = true,
+                -- },
             }
         end,
+    },
+
+    {
+        "yuezk/vim-js",
+    },
+
+    {
+        "maxmellon/vim-jsx-pretty",
     },
 
     { -- Show current scope with a nice animation
