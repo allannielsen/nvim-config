@@ -198,7 +198,7 @@ return {
 
     { -- Show current scope with a nice animation
         "echasnovski/mini.indentscope",
-        version = false, -- wait till new 0.7.0 release to put it back on semver
+        branch = "stable",
         opts = {
             symbol = "│",
             options = { try_as_border = true },
@@ -232,5 +232,51 @@ return {
         enabled = false,
         opts = {},
     },
+
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function(_, opts)
+            require("lualine").setup()
+        end,
+    },
+
+    {
+        "jackMort/ChatGPT.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("chatgpt").setup(
+                -- {
+                --     openai_params = {
+                --         -- NOTE: model can be a function returning the model name
+                --         -- this is useful if you want to change the model on the fly
+                --         -- using commands
+                --         -- Example:
+                --         -- model = function()
+                --         --     if some_condition() then
+                --         --         return "gpt-4-1106-preview"
+                --         --     else
+                --         --         return "gpt-3.5-turbo"
+                --         --     end
+                --         -- end,
+                --         -- model = "gpt-4-1106-preview",
+                --         model = "gpt-3.5-turbo",
+                --         -- frequency_penalty = 0,
+                --         -- presence_penalty = 0,
+                --         -- max_tokens = 4095,
+                --         -- temperature = 0.2,
+                --         -- top_p = 0.1,
+                --         -- n = 1,
+                --     }
+                -- }
+            )
+        end,
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "folke/trouble.nvim", -- optional
+            "nvim-telescope/telescope.nvim"
+        }
+    }
 }
 

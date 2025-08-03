@@ -45,7 +45,6 @@ vim.opt.fillchars = {
 -- set smartindent     " Do smart autoindenting when starting a new line.
 -- autocmd FileType c,cpp setlocal cindent
 vim.opt.copyindent = true      -- Mirroring offset with automatic indentation
-vim.opt.shiftwidth = 4         -- Number of spaces to use for each insertion of (auto)indent.
 vim.opt.tabstop = 8            -- Number of spaces that a <Tab> in the file counts for
 vim.opt.colorcolumn = '80'     -- Set the colour marker
 vim.opt.expandtab = true       -- Expand Tabs (use spaces)?.
@@ -53,6 +52,13 @@ vim.opt.formatoptions="tcrqnj" -- See Help (complex)
 vim.opt.linebreak = true       -- Insert automatic line breaks while typing
 vim.opt.wrap = false           -- No wrap while displaying long lines
 vim.opt.cinoptions= "h2,l2,g2,t0,i8,+8,(0,w1,W8,N-s"
+
+-- Number of spaces to use for each insertion of (auto)indent.
+vim.opt.shiftwidth = 4
+vim.cmd([[
+    autocmd FileType javascript setlocal shiftwidth=2
+    autocmd FileType ruby setlocal shiftwidth=2
+]])
 
 vim.opt.wildmode = "longest,list,full" -- Bash like tab completion
 

@@ -112,7 +112,7 @@ return {
             -- })
             -- lspconfig.bashls.setup({})
             -- lspconfig.solargraph.setup({})
-            -- lspconfig.tsserver.setup({})
+            lspconfig.ts_ls.setup({})
             lspconfig.rust_analyzer.setup({})
             lspconfig.clangd.setup({
                 on_attach = function(client, bufnr)
