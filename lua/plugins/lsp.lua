@@ -43,84 +43,45 @@ return {
             'folke/neodev.nvim',
         },
         config = function()
-            local lspconfig = require('lspconfig')
+            -- Borders for hover/signature
             vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
             vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" })
 
+            -- Common LSP keymaps
             vim.api.nvim_create_autocmd('LspAttach', {
                 callback = function(args)
-                    vim.keymap.set({'n', 'v'}, 'gr', '<cmd>lua vim.lsp.buf.references()<CR>',      { noremap = true, buffer = args.buf, silent = true, desc = 'LSP references'})
-                    vim.keymap.set({'n', 'v'}, 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>',     { noremap = true, buffer = args.buf, silent = true, desc = 'LSP declaration'})
-                    vim.keymap.set({'n', 'v'}, 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>',      { noremap = true, buffer = args.buf, silent = true, desc = 'LSP definition'})
-                    vim.keymap.set({'n', 'v'}, 'gT', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP type definition'})
-                    vim.keymap.set({'n', 'v'}, 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>',  { noremap = true, buffer = args.buf, silent = true, desc = 'LSP implementation'})
-                    vim.keymap.set({'n', 'v'}, 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>',            { noremap = true, buffer = args.buf, silent = true, desc = 'LSP information'})
-                    vim.keymap.set({'n', 'v'}, '<leader>K', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP signature help'})
-                    vim.keymap.set({'i'}, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP signature help'})
-                    vim.keymap.set({'n', 'v'}, '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP add workspace folder'})
-                    vim.keymap.set({'n', 'v'}, '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP remove workspace folder'})
-                    vim.keymap.set({'n', 'v'}, '<leader>wl', '<cmd>lua print(vim.inspect(vimhlsp.buf.list_workspace_folders()))<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP list workspace folders'})
-                    vim.keymap.set({'n', 'v'}, '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP type definition'})
-                    vim.keymap.set({'n', 'v'}, '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP rename symbol'})
-                    vim.keymap.set({'n', 'v'}, '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP code action'})
-                    -- vim.keymap.set({'n', 'v'}, '<leader>ca', vim.lsp.buf.code_action, { noremap = true, buffer = args.buf, silent = true, desc = 'LSP code action' })
-                    vim.keymap.set({'n', 'v'}, '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP show line diagnostics'})
-                    vim.keymap.set({'n', 'v'}, '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP goto prev diagnostics'})
-                    vim.keymap.set({'n', 'v'}, ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP goto next diagnostics'})
-                    vim.keymap.set({'n', 'v'}, '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP set loclist with diagnostics'})
-                    vim.keymap.set({'n', 'v'}, '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', { noremap = true, buffer = args.buf, silent = true, desc = 'LSP formatting'})
+                    vim.keymap.set({'n', 'v'}, 'gr', vim.lsp.buf.references, { buffer = args.buf, desc = 'LSP references'})
+                    vim.keymap.set({'n', 'v'}, 'gD', vim.lsp.buf.declaration, { buffer = args.buf, desc = 'LSP declaration'})
+                    vim.keymap.set({'n', 'v'}, 'gd', vim.lsp.buf.definition, { buffer = args.buf, desc = 'LSP definition'})
+                    vim.keymap.set({'n', 'v'}, 'gT', vim.lsp.buf.type_definition, { buffer = args.buf, desc = 'LSP type definition'})
+                    vim.keymap.set({'n', 'v'}, 'gi', vim.lsp.buf.implementation, { buffer = args.buf, desc = 'LSP implementation'})
+                    vim.keymap.set({'n', 'v'}, 'K', vim.lsp.buf.hover, { buffer = args.buf, desc = 'LSP information'})
+                    vim.keymap.set({'n', 'v'}, '<leader>K', vim.lsp.buf.signature_help, { buffer = args.buf, desc = 'LSP signature help'})
+                    vim.keymap.set({'i'}, '<C-k>', vim.lsp.buf.signature_help, { buffer = args.buf, desc = 'LSP signature help'})
+                    vim.keymap.set({'n', 'v'}, '<leader>wa', vim.lsp.buf.add_workspace_folder, { buffer = args.buf, desc = 'LSP add workspace folder'})
+                    vim.keymap.set({'n', 'v'}, '<leader>wr', vim.lsp.buf.remove_workspace_folder, { buffer = args.buf, desc = 'LSP remove workspace folder'})
+                    vim.keymap.set({'n', 'v'}, '<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, { buffer = args.buf, desc = 'LSP list workspace folders'})
+                    vim.keymap.set({'n', 'v'}, '<leader>D', vim.lsp.buf.type_definition, { buffer = args.buf, desc = 'LSP type definition'})
+                    vim.keymap.set({'n', 'v'}, '<leader>rn', vim.lsp.buf.rename, { buffer = args.buf, desc = 'LSP rename symbol'})
+                    vim.keymap.set({'n', 'v'}, '<leader>ca', vim.lsp.buf.code_action, { buffer = args.buf, desc = 'LSP code action'})
+                    vim.keymap.set({'n', 'v'}, '<leader>e', vim.diagnostic.open_float, { buffer = args.buf, desc = 'LSP show line diagnostics'})
+                    vim.keymap.set({'n', 'v'}, '[d', vim.diagnostic.goto_prev, { buffer = args.buf, desc = 'LSP goto prev diagnostics'})
+                    vim.keymap.set({'n', 'v'}, ']d', vim.diagnostic.goto_next, { buffer = args.buf, desc = 'LSP goto next diagnostics'})
+                    vim.keymap.set({'n', 'v'}, '<leader>q', vim.diagnostic.setloclist, { buffer = args.buf, desc = 'LSP set loclist with diagnostics'})
+                    vim.keymap.set({'n', 'v'}, '<leader>f', function() vim.lsp.buf.format { async = true } end, { buffer = args.buf, desc = 'LSP formatting'})
                     vim.keymap.set({'n', 'v'}, "<leader>ud", function() toggle_diagnostics() end, { desc = "Toggle diagnostics" })
                 end
             })
-            -- lspconfig.pylsp.setup({
-            --   settings = {
-            --     pylsp = {
-            --       plugins = {
-            --         pycodestyle = {
-            --           ignore = {'W391'},
-            --           maxLineLength = 120
-            --         }
-            --       }
-            --     }
-            --   }
-            -- })
 
-            -- lspconfig.yamlls.setup({
-            --   settings = {
-            --     yaml = {
-            --       keyOrdering = false
-            --     }
-            --   }
-            -- })
-
-            -- lspconfig.ccls.setup({})
-            -- lspconfig.lua_ls.setup({
-            --   settings = {
-            --     Lua = {
-            --       diagnostics = {
-            --         globals = {'vim', 'it', 'describe'}
-            --       },
-            --       runtime = {
-            --         version = "LuaJIT",
-            --         path = vim.split(package.path, ';')
-            --       },
-            --       telemetry = {
-            --         enable = false,
-            --       },
-            --     }
-            --   }
-            -- })
-            -- lspconfig.bashls.setup({})
-            -- lspconfig.solargraph.setup({})
-            lspconfig.ts_ls.setup({})
-            lspconfig.rust_analyzer.setup({})
-            lspconfig.clangd.setup({
+            ------------------------------------------------------------------------
+            -- Server configs
+            ------------------------------------------------------------------------
+            vim.lsp.config["ts_ls"] = {}
+            vim.lsp.config["rust_analyzer"] = {}
+            vim.lsp.config["clangd"] = {
                 on_attach = function(client, bufnr)
-                    -- require("workspace-diagnostics").populate_workspace_diagnostics(vim.lsp.buf_get_clients()[1], 1)
-                    -- require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
                     client.server_capabilities.semanticTokensProvider = nil
                 end,
-
                 keys = {
                     { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
                 },
@@ -143,9 +104,25 @@ return {
                     completeUnimported = true,
                     clangdFileStatus = true,
                 },
+            }
 
+            ------------------------------------------------------------------------
+            -- Autocmds to start servers
+            ------------------------------------------------------------------------
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "typescript", "typescriptreact" },
+                callback = function() vim.lsp.start(vim.lsp.config["ts_ls"]) end,
             })
-            -- lspconfig.vimls.setup({})
+
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "rust" },
+                callback = function() vim.lsp.start(vim.lsp.config["rust_analyzer"]) end,
+            })
+
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "c", "cpp" },
+                callback = function() vim.lsp.start(vim.lsp.config["clangd"]) end,
+            })
         end,
     },
 
