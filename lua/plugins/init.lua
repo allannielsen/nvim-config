@@ -14,10 +14,36 @@ return {
         'tjdevries/colorbuddy.nvim', lazy = true
     },
 
-    { -- Run async tasks
-        'stevearc/overseer.nvim',
+    {
+        "stevearc/overseer.nvim",
+        -- The keys table handles the mapping and triggers lazy-loading
+        keys = {
+            { "<leader>ot", "<cmd>OverseerToggle<cr>",      desc = "Toggle" },
+            { "<leader>or", "<cmd>OverseerRun RUN<cr>",     desc = "Task list" },
+            { "<leader>oo", "<cmd>OverseerRun<cr>",         desc = "Run task" },
+            { "<leader>oq", "<cmd>OverseerQuickAction<cr>", desc = "Action recent task" },
+            { "<leader>oi", "<cmd>OverseerInfo<cr>",        desc = "Overseer Info" },
+            { "<leader>ob", "<cmd>OverseerRun BUILD<cr>",   desc = "Task builder" },
+            -- { "<leader>ot", "<cmd>OverseerTaskAction<cr>",  desc = "Task action" },
+            { "<leader>oc", "<cmd>OverseerClearCache<cr>",  desc = "Clear cache" },
+        },
+        opts = {
+            -- Standard configuration
+            templates = { "builtin" },
+            -- This setup ensures the task window opens in a way that doesn't 
+            -- disrupt your layout too much.
+            task_list = {
+                direction = "bottom",
+                bindings = {
+                    ["?"] = "ShowHelp",
+                    ["<CR>"] = "RunAction",
+                    ["K"] = "Hover",
+                    ["L"] = "Details",
+                },
+            },
+        },
         config = function(_, opts)
-            require("overseer").setup()
+            require("overseer").setup(opts)
         end,
     },
 
@@ -237,46 +263,89 @@ return {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function(_, opts)
-            require("lualine").setup()
+
+            require('lualine').setup({
+                -- sections = {
+                --     lualine_x = {
+                --         'overseer', -- This is the magic line
+                --         'encoding',
+                --         'fileformat',
+                --         'filetype',
+                --     },
+                -- },
+
+                sections = {
+                    lualine_x = {
+                        {
+                            "overseer",
+                            label = 'Tasks: ', -- Prefix for the component
+                            colored = true,    -- Color the task icons and counts
+                            symbols = {
+                                [require("overseer").STATUS.FAILURE] = "✘ ",
+                                [require("overseer").STATUS.CANCELED] = " ",
+                                [require("overseer").STATUS.SUCCESS] = "✓ ",
+                                [require("overseer").STATUS.RUNNING] = "󱎫 ",
+                            },
+                            unique = true,
+                            name_not_title = false,
+                        },
+                        "encoding",
+                        "filetype",
+                    },
+                }
+
+            })
         end,
     },
 
+    -- {
+    --     "jackMort/ChatGPT.nvim",
+    --     event = "VeryLazy",
+    --     config = function()
+    --         require("chatgpt").setup(
+    --             -- {
+    --             --     openai_params = {
+    --             --         -- NOTE: model can be a function returning the model name
+    --             --         -- this is useful if you want to change the model on the fly
+    --             --         -- using commands
+    --             --         -- Example:
+    --             --         -- model = function()
+    --             --         --     if some_condition() then
+    --             --         --         return "gpt-4-1106-preview"
+    --             --         --     else
+    --             --         --         return "gpt-3.5-turbo"
+    --             --         --     end
+    --             --         -- end,
+    --             --         -- model = "gpt-4-1106-preview",
+    --             --         model = "gpt-3.5-turbo",
+    --             --         -- frequency_penalty = 0,
+    --             --         -- presence_penalty = 0,
+    --             --         -- max_tokens = 4095,
+    --             --         -- temperature = 0.2,
+    --             --         -- top_p = 0.1,
+    --             --         -- n = 1,
+    --             --     }
+    --             -- }
+    --         )
+    --     end,
+    --     dependencies = {
+    --         "MunifTanjim/nui.nvim",
+    --         "nvim-lua/plenary.nvim",
+    --         "folke/trouble.nvim", -- optional
+    --         "nvim-telescope/telescope.nvim"
+    --     }
+    -- }
+
+    -- {
+    --     'kiddos/gemini.nvim',
+    --     opts = {}
+    -- }
+
     {
-        "jackMort/ChatGPT.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("chatgpt").setup(
-                -- {
-                --     openai_params = {
-                --         -- NOTE: model can be a function returning the model name
-                --         -- this is useful if you want to change the model on the fly
-                --         -- using commands
-                --         -- Example:
-                --         -- model = function()
-                --         --     if some_condition() then
-                --         --         return "gpt-4-1106-preview"
-                --         --     else
-                --         --         return "gpt-3.5-turbo"
-                --         --     end
-                --         -- end,
-                --         -- model = "gpt-4-1106-preview",
-                --         model = "gpt-3.5-turbo",
-                --         -- frequency_penalty = 0,
-                --         -- presence_penalty = 0,
-                --         -- max_tokens = 4095,
-                --         -- temperature = 0.2,
-                --         -- top_p = 0.1,
-                --         -- n = 1,
-                --     }
-                -- }
-            )
-        end,
-        dependencies = {
-            "MunifTanjim/nui.nvim",
-            "nvim-lua/plenary.nvim",
-            "folke/trouble.nvim", -- optional
-            "nvim-telescope/telescope.nvim"
-        }
+        'mrcjkb/rustaceanvim',
+        version = '^6', -- Recommended
+        lazy = false, -- This plugin is already lazy
     }
+
 }
 

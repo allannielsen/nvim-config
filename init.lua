@@ -1,6 +1,11 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+-- Ensure copy-paste works with OSC52 enabled terminals
+vim.g.clipboard = 'osc52'
+vim.opt.clipboard = 'unnamedplus'
+
+
 vim.opt.ttyfast = true    -- Optimize for quick connection terminal
 vim.opt.number = true     -- Turn on line numbers
 vim.opt.lazyredraw = true -- Do not redraw while running macros (much faster)
