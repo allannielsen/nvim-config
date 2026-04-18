@@ -16,14 +16,18 @@ end
 
 return {
     {
-        'folke/neodev.nvim',
-        config = function()
-            require("neodev").setup({})
-        end,
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+            library = {
+                -- Load luvit types when the `vim.uv` word is found
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+            },
+        },
     },
 
     {
-        "artemave/workspace-diagnostics.nvim",
+        "smnatale/workspace-diagnostics.nvim",
         config = function()
             require("workspace-diagnostics").setup({
                 workspace_files = function()
@@ -40,12 +44,16 @@ return {
     {
         "neovim/nvim-lspconfig",
         dependencies = {
-            'folke/neodev.nvim',
+            "folke/lazydev.nvim",
         },
         config = function()
             -- Borders for hover/signature
-            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
-            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" })
+            vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, config)
+                return vim.lsp.handlers.hover(err, result, ctx, vim.tbl_extend("force", config or {}, { border = "single" }))
+            end
+            vim.lsp.handlers["textDocument/signatureHelp"] = function(err, result, ctx, config)
+                return vim.lsp.handlers.signature_help(err, result, ctx, vim.tbl_extend("force", config or {}, { border = "single" }))
+            end
 
             -- Common LSP keymaps
             vim.api.nvim_create_autocmd('LspAttach', {
@@ -55,17 +63,18 @@ return {
                     vim.keymap.set({'n', 'v'}, 'gd', vim.lsp.buf.definition, { buffer = args.buf, desc = 'LSP definition'})
                     vim.keymap.set({'n', 'v'}, 'gT', vim.lsp.buf.type_definition, { buffer = args.buf, desc = 'LSP type definition'})
                     vim.keymap.set({'n', 'v'}, 'gi', vim.lsp.buf.implementation, { buffer = args.buf, desc = 'LSP implementation'})
-                    vim.keymap.set({'n', 'v'}, 'K', vim.lsp.buf.hover, { buffer = args.buf, desc = 'LSP information'})
-                    vim.keymap.set({'n', 'v'}, '<leader>K', vim.lsp.buf.signature_help, { buffer = args.buf, desc = 'LSP signature help'})
-                    vim.keymap.set({'i'}, '<C-k>', vim.lsp.buf.signature_help, { buffer = args.buf, desc = 'LSP signature help'})
+                    vim.keymap.set({'n', 'v'}, 'K', function() vim.lsp.buf.hover({ border = 'single' }) end, { buffer = args.buf, desc = 'LSP information'})
+                    vim.keymap.set({'n', 'v'}, '<leader>K', function() vim.lsp.buf.signature_help({ border = 'single' }) end, { buffer = args.buf, desc = 'LSP signature help'})
+                    vim.keymap.set({'i'}, '<C-k>', function() vim.lsp.buf.signature_help({ border = 'single' }) end, { buffer = args.buf, desc = 'LSP signature help'})
                     vim.keymap.set({'n', 'v'}, '<leader>wa', vim.lsp.buf.add_workspace_folder, { buffer = args.buf, desc = 'LSP add workspace folder'})
                     vim.keymap.set({'n', 'v'}, '<leader>wr', vim.lsp.buf.remove_workspace_folder, { buffer = args.buf, desc = 'LSP remove workspace folder'})
                     vim.keymap.set({'n', 'v'}, '<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, { buffer = args.buf, desc = 'LSP list workspace folders'})
                     vim.keymap.set({'n', 'v'}, '<leader>D', vim.lsp.buf.type_definition, { buffer = args.buf, desc = 'LSP type definition'})
                     vim.keymap.set({'n', 'v'}, '<leader>rn', vim.lsp.buf.rename, { buffer = args.buf, desc = 'LSP rename symbol'})
                     vim.keymap.set({'n', 'v'}, '<leader>ca', vim.lsp.buf.code_action, { buffer = args.buf, desc = 'LSP code action'})
-                    vim.keymap.set({'n', 'v'}, '<leader>e', vim.diagnostic.open_float, { buffer = args.buf, desc = 'LSP show line diagnostics'})
+                    vim.keymap.set({'n', 'v'}, '<leader>e', function() vim.diagnostic.open_float({ border = 'single' }) end, { buffer = args.buf, desc = 'LSP show line diagnostics'})
                     vim.keymap.set({'n', 'v'}, '[d', vim.diagnostic.goto_prev, { buffer = args.buf, desc = 'LSP goto prev diagnostics'})
+
                     vim.keymap.set({'n', 'v'}, ']d', vim.diagnostic.goto_next, { buffer = args.buf, desc = 'LSP goto next diagnostics'})
                     vim.keymap.set({'n', 'v'}, '<leader>q', vim.diagnostic.setloclist, { buffer = args.buf, desc = 'LSP set loclist with diagnostics'})
                     vim.keymap.set({'n', 'v'}, '<leader>f', function() vim.lsp.buf.format { async = true } end, { buffer = args.buf, desc = 'LSP formatting'})
@@ -188,6 +197,7 @@ return {
                     end,
                 },
                 sources = {
+                    { name = "lazydev", group_index = 0 },
                     -- { name = "buffer" },
                     { name = "nvim_lsp" },
                     -- { name = "treesitter" },

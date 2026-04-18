@@ -176,41 +176,34 @@ return {
 
     { -- Tree Sitter and friends --------------------------------------------
         "nvim-treesitter/nvim-treesitter",
+        branch = "main",
+        lazy = false,
         build = ":TSUpdate",
         dependencies = {
             "andymass/vim-matchup",
-            -- "RRethy/nvim-treesitter-endwise"
         },
-        config = function(_, opts)
-            require 'nvim-treesitter'.setup()
-            require 'nvim-treesitter.configs'.setup {
-                highlight = { enable = false },
-                indent = {
-                    enable = true,
-                    disable = { "ruby" },
-                },
-                ensure_installed = { "awk", "bash", "c", "cpp", "cmake", "css", "devicetree", "diff",
-                    "dockerfile", "html", "javascript", "jsdoc", "json", "jsonc", "lua", "luadoc", "luap",
-                    "markdown", "markdown_inline", "python", "query", "regex", "ruby", "rust", "toml",
-                    "tsx", "typescript", "vim", "vimdoc", "xml", "yaml", "yang" },
-                incremental_selection = {
-                    enable = true,
-                    keymaps = {
-                        init_selection = "<C-space>",
-                        node_incremental = "<C-space>",
-                        scope_incremental = false,
-                        node_decremental = "<bs>",
-                    },
-                },
-                matchup = {
-                    enable = true,  -- mandatory, false will disable the whole extension
-                    disable = { },  -- optional, list of language that will be disabled
-                    -- [options]
-                },
-                -- endwise = {
-                --     enable = true,
-                -- },
-            }
+        config = function()
+            local ts = require("nvim-treesitter")
+            ts.setup()
+
+            ts.install({ "awk", "bash", "c", "cpp", "cmake", "css", "devicetree", "diff",
+                "dockerfile", "html", "javascript", "jsdoc", "json", "lua", "luadoc", "luap",
+                "markdown", "markdown_inline", "python", "query", "regex", "ruby", "rust", "toml",
+                "tsx", "typescript", "vim", "vimdoc", "xml", "yaml", "yang" })
+
+            -- Re-enable indentation for all except ruby
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "*",
+                callback = function(args)
+                    local ft = vim.bo[args.buf].filetype
+                    if ft ~= "ruby" then
+                         local lang = vim.treesitter.language.get_lang(ft)
+                         if lang then
+                             vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                         end
+                    end
+                end,
+            })
         end,
     },
 
